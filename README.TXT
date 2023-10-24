@@ -31,10 +31,12 @@ GB/2.h - задний фон игры и экрана с результатом,
 LIB/neslib.h - библиотека NES hardware-dependent функции от Shiru (для 6502 C compiler)
 LIB/nesdoug.h - библиотека от Doug Fraker (для 6502 C compiler)
 
-библиотеки и исходниеи на ассемблере
+библиотеки (исходники на ассемблере):
 crt0.s - код на ассемблере ca65 необходимый для игры, на основе кода Groepaz/Hitmen и Ullrich von Bassewitz
 LIB/neslib.s -  код на ассемблере ca65 необходимый для LIB/neslib.h
 LIB/nesdoug.s -  код на ассемблере ca65 необходимый для LIB/nesdoug.h 
+
+звуки и музыка:
 MUSIC/famitone2.s - код на ассемблере ca65 аудио драйвера 
 MUSIC/Fx.s - код на ассемблера ca65 для звуковых эфектов в игре
 MUSIC/Music.s - код на ассемблера ca65 содержащий музыку для игры
