@@ -61,6 +61,9 @@ const unsigned char STATE_GAME  = 1;
 // третий экран, идет после игры - результат игры
 const unsigned char STATE_RESULT = 2;
 
+// пауза
+const unsigned char STATE_PAUSE = 3;
+
 // Еда
 const unsigned char FOOD = '.';
 
@@ -199,6 +202,7 @@ int address;
 // 0 - STATE_SELECT - стартовый экран (выбор количества игроков)
 // 1 - STATE_GAME - игра - второй экран после выбора количества игроков
 // 2 - STATE_GAME_RESULT - третий экран, идет после игры - результат игры
+// 3 - STATE_PAUSE - пауза
 unsigned char gameState = 0;
 
 
@@ -350,6 +354,17 @@ unsigned char score010 = 0;
 // сотни для итоговых очков
 unsigned char score100 = 0;
 
+// координата спрайта с словом ПАУЗА по x
+unsigned char pauseX = 112;
+
+// координата спрайта с словом ПАУЗА по y
+unsigned char pauseY = 122;
+
+// скорость смещения спрайта с словом ПАУЗА по x
+int pauseDX = -1;
+
+// скорость смещения спрайта с словом ПАУЗА по y
+int pauseDY = -2;
 
 /**
  * Функции

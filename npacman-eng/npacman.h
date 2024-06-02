@@ -61,6 +61,9 @@ const unsigned char STATE_GAME  = 1;
 // третий экран, идет после игры - результат игры
 const unsigned char STATE_RESULT = 2;
 
+// пауза
+const unsigned char STATE_PAUSE = 3;
+
 // Еда
 const unsigned char FOOD = '.';
 
@@ -350,6 +353,17 @@ unsigned char score010 = 0;
 // сотни для итоговых очков
 unsigned char score100 = 0;
 
+// координата спрайта с словом ПАУЗА по x
+unsigned char pauseX = 112;
+
+// координата спрайта с словом ПАУЗА по y
+unsigned char pauseY = 122;
+
+// скорость смещения спрайта с словом ПАУЗА по x
+int pauseDX = -1;
+
+// скорость смещения спрайта с словом ПАУЗА по y
+int pauseDY = -2;
 
 /**
  * Функции

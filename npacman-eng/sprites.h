@@ -307,3 +307,14 @@ const unsigned char SPIRIT2[] = {
 	  8, 8, 0x79,3,
 	128
 };
+
+// спрайт Пауза
+//    x, y, tile, pallete
+const unsigned char PAUSE[] = {
+      0,  0, 0xa4, 1,
+	  8,  0, 0xa5, 1,
+	  16, 0, 0xa6, 1,
+	  24, 0, 0xa7, 1,
+	  32, 0, 0xa8, 1,
+	128
+};

@@ -984,9 +984,17 @@ int pacGirlState() {
  *  передвижение персонажей во время игры
  */
 void actions(void) {
+
+	// задержка для обработки нажатия кнопок (если нужна)
+	if (playersTime > 0) {
+		// защита от двойного нажатия,
+		// когда playersTime станет равным 0 обработчик заработает  опять
+		--playersTime;
+	}
+
 	if (STATE_SELECT == gameState) {
 		// стартовый экран (выбор количества игроков)
-		if ((pad1 & PAD_START) || (pad2 & PAD_START) && playersTime == 0) {			
+		if (((pad1 & PAD_START) || (pad2 & PAD_START)) && playersTime == 0) {
 			// нажат Start на 1 или 2 джойстике
 			music_stop();
 			//music_play(3);
@@ -1011,6 +1019,8 @@ void actions(void) {
 
 			// рисуем задний фон с лабиринтом для игры
 			drawBackground();
+
+			playersTime = 30;
 			return;
 		}
 
@@ -1047,17 +1057,38 @@ void actions(void) {
 			return;
 		}
 
-		// задержка для обработки нажатия SELECT
-		if (playersTime > 0) {
-			// защита от двойного нажатия,
-			// когда playersTime станет равным 0 обработчик заработает  опять
-			--playersTime;
-		}
 	}
 
 
+	if (STATE_PAUSE == gameState) {
+		// игра на паузе
+
+    	if (((pad1 & PAD_START) || (pad2 & PAD_START)) && playersTime == 0) {
+    		gameState = STATE_GAME;
+    		playersTime = 30;
+    		return;
+    	}
+
+    	pauseY = pauseY + pauseDY;
+    	pauseX = pauseX + pauseDX;
+
+    	if (pauseY <= 0 || pauseY >= 224) {
+    		pauseDY = -pauseDY;
+    	}
+
+    	if (pauseX <= 0 || pauseX >= 215) {
+    		pauseDX = -pauseDX;
+    	}
+	}
+
     if (STATE_GAME == gameState) {    	
-		// идет ира
+		// идет игра
+
+    	if (((pad1 & PAD_START) || (pad2 & PAD_START)) && playersTime == 0) {
+    		gameState = STATE_PAUSE;
+    		playersTime = 30;
+    		return;
+    	}
 
 		if (pad1 & PAD_LEFT) {
 			// нажата кнопка влеао на 1 джойстике
@@ -1252,6 +1283,11 @@ void drawSprites(void) {
 		// отрисовываем спрайты игры 
 		// PAC-MAN, Pac-Girl, RED или SHADOW, дверь, черешню
 		refreshGame();    	
+	}
+
+	if (STATE_PAUSE == gameState) {
+		// игра на паузе
+		oam_meta_spr(pauseX, pauseY, PAUSE);
 	}
 }
 
