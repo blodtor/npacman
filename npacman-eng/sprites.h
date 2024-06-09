@@ -310,7 +310,7 @@ const unsigned char SPIRIT2[] = {
 
 // спрайт Пауза
 //    x, y, tile, pallete
-const unsigned char PAUSE[] = {
+unsigned char PAUSE[] = {
       0,  0, 0xa4, 1,
 	  8,  0, 0xa5, 1,
 	  16, 0, 0xa6, 1,

@@ -92,7 +92,7 @@ const unsigned char SHADOW = '@';
 const unsigned char CHERRY = '%';
 
 // палитра для tile заднего фона
-const unsigned char paletteForBackground[]={
+const char paletteForBackground[]={
 	0x0f, 0x2a, 0x11, 0x10,
 	0x0f, 0x37, 0x14, 0x15, 
 	0x0f, 0x37, 0x14, 0x11,
@@ -100,7 +100,7 @@ const unsigned char paletteForBackground[]={
 };
 
 // палитра для спрайтов
-const unsigned char paletteForSprites[]={
+const char paletteForSprites[]={
 	0x0f, 0x30, 0x15, 0x38, 
 	0x0f, 0x30, 0x15, 0x27,  
 	0x0f, 0x30, 0x15, 0x11, 
@@ -364,6 +364,21 @@ int pauseDX = -1;
 
 // скорость смещения спрайта с словом ПАУЗА по y
 int pauseDY = -2;
+
+// номер палитры для паузы, значение от 0 до 3
+unsigned char pausePal = 0;
+
+// для указания сразу 4х палитр для 16 тайлов, значение от 0 до 255 т.к. разрешение экрана 256×240
+unsigned char pauseMTbyte = 0;
+
+// счетчик для смены палитры паузы
+unsigned char pauseTime = 30;
+
+// колонка Y из NESSt преобразовать в координату y точки экрана (0 - 240)
+#define COL_TO_Y(y) 	((y|1)<<3)
+
+// строка X из NESSt преобразовать в координату x точки экрана (0 - 256)
+#define ROW_TO_X(x) 	((x<<3)|8)
 
 /**
  * Функции

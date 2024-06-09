@@ -1079,6 +1079,27 @@ void actions(void) {
     	if (pauseX <= 0 || pauseX >= 215) {
     		pauseDX = -pauseDX;
     	}
+
+    	if (pauseTime <=0) {
+    		// раз в 30 циклов меняем номер палитры 0 -> 1 -> 2 -> 3 -> 0 и так по кругу
+
+    		pauseTime = 30;
+			if (pausePal < 3) {
+				++pausePal;
+			} else {
+				pausePal = 0;
+			}
+
+			// меняем палитру для всех тайлов спрайта на значение pausePal
+			PAUSE[3]  = pausePal;
+			PAUSE[7]  = pausePal;
+			PAUSE[11] = pausePal;
+			PAUSE[15] = pausePal;
+			PAUSE[19] = pausePal;
+    	}
+
+    	// счетчик циклов во время паузы идущий к 0
+    	pauseTime--;
 	}
 
     if (STATE_GAME == gameState) {    	
@@ -1287,6 +1308,7 @@ void drawSprites(void) {
 
 	if (STATE_PAUSE == gameState) {
 		// игра на паузе
+
 		oam_meta_spr(pauseX, pauseY, PAUSE);
 	}
 }
@@ -1303,7 +1325,7 @@ void drawBlackBox(void) {
 	x = (i << 3) + 8;
 
 	// y = j * 8
-   y = ((j + 1) << 3);
+    y = ((j + 1) << 3);
 
 	address = get_ppu_addr(0, x, y);
 
@@ -1330,7 +1352,7 @@ void drawText(void) {
 		text = redBonus + '0';
 		one_vram_buffer(text, NTADR_A(7,25));
 
-      // количество съеденных поверапов
+        // количество съеденных поверапов
 		text = powerBonus + '0';
 		one_vram_buffer(text, NTADR_A(24,27));
 		
@@ -1393,8 +1415,51 @@ void drawText(void) {
 		
 		text = score001 + '0';
 		one_vram_buffer(text, NTADR_A(19,27));
+	}
+
+	// игра на паузе
+  	if (STATE_PAUSE == gameState) {          // двоичное    = 16   = 10 ричное
+		one_vram_buffer(0b11100100, 0x23c0); // 11 10 01 00 = 0xe4 = 228
+											 //  3  2  1  0 - палитра
+
+											 // в NESst и на TV так:
+											 // 00 01       0  1
+		                                     // 10 11  или  2  3
 
 
+		// получить адрес в ATTRIBUTE TABLE
+		// для NT = 0 (NAME TABLE)
+		// в координате x = 255 y = 0 (разрешение экрана 256×240 для Dendy)
+		//                    NT   x  y
+		address = get_at_addr(0, 255, 0);
+
+
+		// замменить байт в vram ppu по адресу address
+		// на значение 0xe4				     // двоичное    = 16   = 10 ричное
+		one_vram_buffer(0xe4, address);      // 11 10 01 00 = 0xe4 = 228
+		                                     //  3  2  1  0 - палитра
+
+		switch(pausePal) {
+			case  1:
+				pauseMTbyte = 0b01010101;    // 01 01 01 01 = 0x55 = 170
+				break;                       //  1  1  1  1 - палитра
+			case  2:
+				pauseMTbyte = 0xaa;		     // 10 10 10 10 = 0xAA = 252
+				break;                       //  2  2  2  2 - палитра
+			case 3:
+				pauseMTbyte = 255;           // 11 11 11 11 = 0xFF = 255
+				break;                       //  3  3  3  3 - палитра
+			default:
+				pauseMTbyte = 0;		     // 00 00 00 00 = 0x0 = 0
+		}
+
+        //                    NT    row to x     col to  y
+		address = get_at_addr(0, (24 << 3) + 8, ((25 + 1) << 3));
+		one_vram_buffer(pauseMTbyte, address);
+
+		//                    NT    row to x     col to  y
+		address = get_at_addr(0, ROW_TO_X(28), COL_TO_Y(25));
+		one_vram_buffer(pauseMTbyte, address);
 	}
 }
 
